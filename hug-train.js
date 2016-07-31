@@ -13,3 +13,9 @@ var debounce = function (delay, cb) {
   }
 }
 
+var setCSS = function (styles, element) {
+  Object.keys(styles).forEach(function (rule) {
+    element.style[rule] = styles[rule] // eslint-disable-line no-param-reassign
+  })
+}
+
