@@ -19,3 +19,17 @@ var setCSS = function (styles, element) {
   })
 }
 
+var animate = function (time, timingFunction) {
+  var start = Date.now()
+
+  var animateHelper = function () {
+    var now = Date.now()
+    if (now > start + time) return
+    var passed = now - start
+    timingFunction(passed / time)
+    requestAnimationFrame(animateHelper)
+  }
+
+  animateHelper()
+}
+
