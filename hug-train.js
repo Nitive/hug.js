@@ -48,13 +48,23 @@ var disappearElement = function (time, element) {
   }, time)
 }
 
+var random = function (start, end) {
+  return (Math.random() * (end - start)) + start
+}
+
+var randomAngle = function () {
+  return 360 * Math.random()
+}
 
 var HUG_SIDE = 44
 
 
-var main = function () {
-  var hugs = document.createElement('div')
-
+/**
+ * hugGenerator
+ * @param hugsConatiner: HtmlElement element to add hugs
+ * @return function to stop creating hugs
+ */
+var hugGenerator = function (hugsContainer) {
   var addHug = function (coords) {
     var hug = createHug()
     setCSS({
@@ -62,8 +72,34 @@ var main = function () {
       top: coords.y + 'px',
       left: coords.x + 'px'
     }, hug)
-    hugs.appendChild(hug)
-    disappearElement(1500, hug)
+
+    hugsContainer.appendChild(hug)
+
+    // random data for hug
+    var disapperTime = 3000 * Math.random()
+    var angle = randomAngle()
+    var startRotate = randomAngle()
+    var turnsCount = 2 * Math.random()
+    var endRotate = randomAngle() + (360 * turnsCount)
+    var startSize = random(0.5, 0.7)
+    var endSize = random(0.9, 1.5)
+
+    animate(disapperTime, function (passedProcent) {
+      var passed = passedProcent * 100
+      var x = passed * Math.cos(angle)
+      var y = passed * Math.sin(angle)
+      var rotate = startRotate + ((endRotate - startRotate) * passedProcent)
+      var scale = startSize + ((endSize - startSize) * passedProcent)
+
+      setCSS({
+        transform: [
+          'translate3d(' + x + 'px, ' + y + 'px, 0)',
+          'rotate(' + rotate + 'deg)',
+          'scale(' + scale + ')'
+        ].join('')
+      }, hug)
+    })
+    disappearElement(disapperTime, hug)
   }
 
   var move = debounce(1, function (event) {
@@ -73,9 +109,15 @@ var main = function () {
     })
   })
 
-  $('body').appendChild(hugs)
-  $('html').addEventListener('mousemove', move)
+  var $html = $('html')
+  $html.addEventListener('mousemove', move)
+
+  return function stop() {
+    $html.removeEventListener('mousemove', move)
+  }
 }
 
 
-main()
+var hugs = document.createElement('div')
+$('body').appendChild(hugs)
+hugGenerator(hugs)
