@@ -1,0 +1,11 @@
+{
+  "name": "nsmolentseva",
+  "version": "0.1.0",
+  "description": "",
+  "main": "hug-train.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Maxim Samoilov <nitive@icloud.com>",
+  "license": "MIT"
+}
