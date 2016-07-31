@@ -1,1 +1,8 @@
-extends: as
+extends: airbnb-base/legacy
+
+rules:
+  semi:
+    - error
+    - never
+  vars-on-top: off
+  func-names: off
